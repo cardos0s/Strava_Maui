@@ -1,0 +1,9 @@
+﻿Para um app profissional (como o Strava real), a gente usa uma técnica chamada "Single CollectionView".
+
+Em vez de colocar listas dentro de um ScrollView, a página inteira vira uma única CollectionView.
+
+    O "Cabeçalho" vira o Header da CollectionView.
+
+    O "Carrossel" vira o primeiro item.
+
+    As "Atividades" são os itens seguintes.

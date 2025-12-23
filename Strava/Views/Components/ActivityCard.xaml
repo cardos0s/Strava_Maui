@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+    <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Strava.Views.Components.ActivityCard"
+             x:Name="this">
+
+    <Border BackgroundColor="White"
+            StrokeShape="RoundRectangle 25"
+            Padding="0"
+            WidthRequest="350"
+            StrokeThickness="0">
+        <Border.GestureRecognizers>
+            <TapGestureRecognizer 
+                Command="{Binding TapCommand, Source={x:Reference this}}"
+                CommandParameter="{Binding .}" />
+        </Border.GestureRecognizers>
+        <Border.Shadow>
+            <Shadow Brush="Black" Offset="5,5" Opacity="0.05" Radius="10" />
+        </Border.Shadow>
+
+        <VerticalStackLayout BackgroundColor="White" Padding="15" Spacing="15" WidthRequest="350" >
+            <Grid ColumnDefinitions="Auto, *, Auto">
+                <Border StrokeShape="RoundRectangle 20" HeightRequest="45" WidthRequest="45">
+                    <Image Source="profile_placeholder.png" Aspect="AspectFill"/>
+                </Border>
+                
+                <VerticalStackLayout Grid.Column="1" Margin="12,0" VerticalOptions="Center">
+                    <Label Text="{Binding UserName, Source={x:Reference this}}" FontAttributes="Bold" FontSize="15"/>
+                    <Label Text="Yesterday, LA" FontSize="12" TextColor="Gray"/>
+                </VerticalStackLayout>
+
+                <Image Grid.Column="2" Source="dots_icon.png" WidthRequest="20" Opacity="0.5"/>
+            </Grid>
+
+            <HorizontalStackLayout Spacing="15">
+                <Label Text="Afternoon Ride" FontAttributes="Bold" VerticalOptions="Center"/>
+                <Label Text="Distance" FontSize="11" TextColor="Gray" VerticalOptions="Center"/>
+                <Label Text="{Binding Distance, Source={x:Reference this}}" FontAttributes="Bold" VerticalOptions="Center"/>
+            </HorizontalStackLayout>
+
+            <Border StrokeShape="RoundRectangle 20" 
+                    HeightRequest="200" 
+                    StrokeThickness="0"
+                    BackgroundColor="#F9F9F9">
+                <Image Source="map_sample_orange.png" Aspect="AspectFill"/>
+            </Border>
+
+            <HorizontalStackLayout Spacing="25" Padding="5,5">
+                <Image Source="like_outline.png" WidthRequest="22"/>
+                <Image Source="share_outline.png" WidthRequest="22"/>
+                <Image Source="send_outline.png" WidthRequest="22"/>
+            </HorizontalStackLayout>
+
+            
+        </VerticalStackLayout>
+    </Border>
+</ContentView>

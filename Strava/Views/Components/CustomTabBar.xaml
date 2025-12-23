@@ -1,0 +1,88 @@
+﻿<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Strava.Views.Components.CustomTabBar"
+             BackgroundColor="Transparent">
+
+    <Grid HeightRequest="90" VerticalOptions="End" BackgroundColor="Transparent" IgnoreSafeArea="True">
+        
+        <Border BackgroundColor="White"
+                HeightRequest="65"
+                VerticalOptions="End"
+                StrokeThickness="0">
+            <Border.Shadow>
+                <Shadow Brush="Black" Offset="0,-1" Opacity="0.1" Radius="5" />
+            </Border.Shadow>
+
+            <Grid ColumnDefinitions="*, *, 80, *, *" 
+                  VerticalOptions="Center" 
+                  HeightRequest="65">
+                
+                <Image Grid.Column="0"
+                       Source="home_icon.png"
+                       HeightRequest="22"
+                       WidthRequest="22"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnHomeClicked" />
+                    </Image.GestureRecognizers>
+                </Image>
+                
+                <Image Grid.Column="1" 
+                       Source="share_icon.png" 
+                       HeightRequest="22"
+                       WidthRequest="22" 
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnMapsClicked" />
+                    </Image.GestureRecognizers>
+                </Image>
+
+
+                <Image Grid.Column="3" 
+                       Source="group_icon.png" 
+                       HeightRequest="22"
+                       WidthRequest="22" 
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnGroupsClicked" />
+                    </Image.GestureRecognizers>
+                </Image>
+
+                <Image Grid.Column="4" 
+                       Source="profile_icon.png" 
+                       HeightRequest="22" 
+                       WidthRequest="22"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnProfileClicked" />
+                    </Image.GestureRecognizers>
+                </Image>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Column="0" HorizontalOptions="Center" VerticalOptions="Start" TranslationY="0">
+            <Ellipse Fill="#FC5200" 
+                     HeightRequest="60" 
+                     WidthRequest="60" 
+                     HorizontalOptions="Center" 
+                     VerticalOptions="Center">
+                <Ellipse.Shadow>
+                    <Shadow Brush="#FC5200" Opacity="0.3" Radius="8" Offset="0,4" />
+                </Ellipse.Shadow>
+            </Ellipse>
+            
+            <Image Source="play_white.png" 
+                   WidthRequest="22" 
+                   HorizontalOptions="Center" 
+                   VerticalOptions="Center"/>
+
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnRecordTapped" />
+            </Grid.GestureRecognizers>
+        </Grid>
+    </Grid>
+</ContentView>
