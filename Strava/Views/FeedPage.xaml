@@ -7,93 +7,134 @@
              xmlns:components1="clr-namespace:Strava.Views.Components"
              x:Class="Strava.Views.FeedPage"
              x:DataType="viewmodels:FeedViewModel"
-             BackgroundColor="#F5F5F7">
-    <Grid> 
+             BackgroundColor="#F5F5F7"
+             Shell.NavBarIsVisible="False">
 
-    <CollectionView ItemsSource="{Binding Activities}"
-                    SelectionMode="None"
-                    VerticalScrollBarVisibility="Never">
+    <Grid>
+        <!-- MAIN CONTENT -->
+        <CollectionView ItemsSource="{Binding Activities}"
+                        SelectionMode="None"
+                        VerticalScrollBarVisibility="Never">
 
-        <CollectionView.Header>
-            <VerticalStackLayout Spacing="10" Padding="0,20">
-                
-                <Grid ColumnDefinitions="Auto,*,Auto,Auto" Padding="20,0">
-                    <Border StrokeShape="RoundRectangle 25" HeightRequest="50" WidthRequest="50" StrokeThickness="0">
-                        <Image Source="profile.png" Aspect="AspectFill"/>
-                    </Border>
-                    <VerticalStackLayout Grid.Column="1" Margin="10,0" VerticalOptions="Center">
-                        <Label Text="John Sanaaarh" FontAttributes="Bold" FontSize="16" TextColor="Black"/>
-                        <Label Text="@johnsanaarh" FontSize="12" TextColor="Gray"/>
-                    </VerticalStackLayout>
-                    <Image Grid.Column="2" Source="bell_icon.png" WidthRequest="24" Margin="5"/>
-                    <Image Grid.Column="3" Source="settings_icon.png" WidthRequest="24" Margin="5"/> 
-                </Grid>
+            <CollectionView.Header>
+                <VerticalStackLayout Spacing="10" Padding="0,50,0,0">
 
-                <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never" Margin="0,10">
-                    <HorizontalStackLayout Spacing="10" Padding="20,0">
-                        <components:ActivityChip Text="Bike" Icon="bike_white.png" IsSelected="True"/>
-                        <components:ActivityChip Text="Run"  Icon="run_gray.png"   IsSelected="False"/>
-                        <components:ActivityChip Text="Hike" Icon="hike_gray.png"  IsSelected="False"/>
-                        <components:ActivityChip Text="Walk" Icon="run_gray.png"   IsSelected="False"/>
-                        <components:ActivityChip Text="Walk" Icon="run_gray.png"   IsSelected="False"/>
-                        <components:ActivityChip Text="Swim" Icon="run_gray.png"   IsSelected="False"/>
-                    </HorizontalStackLayout>
-                </ScrollView>
+                    <!-- HEADER -->
+                    <Grid ColumnDefinitions="Auto,*,Auto,Auto" Padding="20,0">
+                        <Border StrokeShape="RoundRectangle 25"
+                                HeightRequest="50" WidthRequest="50"
+                                StrokeThickness="0"
+                                BackgroundColor="#F0F0F0">
+                            <Image Source="usain_bolt" Aspect="AspectFill" />
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnMenuTapped" />
+                            </Border.GestureRecognizers>
+                        </Border>
 
-                <Label FontSize="32" Padding="20,0" Margin="0,15">
-                    <Label.FormattedText>
-                        <FormattedString>
-                            <Span Text="Welcome, " TextColor="Black"/>
-                            <Span Text="John!" FontAttributes="Bold" TextColor="Black"/>
-                        </FormattedString>
-                    </Label.FormattedText>
-                </Label>
+                        <VerticalStackLayout Grid.Column="1" Margin="12,0" VerticalOptions="Center">
+                            <Label Text="{Binding UserName}" FontAttributes="Bold" FontSize="16" TextColor="Black" />
+                            <Label Text="@johnsanaarh" FontSize="12" TextColor="#999" />
+                        </VerticalStackLayout>
+                        <Image Grid.Column="2" Source="bell_icon.png" WidthRequest="22" Margin="8,0"
+                               VerticalOptions="Center" Opacity="0.6" />
+                        <Image Grid.Column="3" Source="settings_icon.png" WidthRequest="22" Margin="8,0"
+                               VerticalOptions="Center" Opacity="0.6" />
+                    </Grid>
 
-                <CollectionView ItemsSource="{Binding ClubSuggestions}" 
-                                HeightRequest="240"
-                                SelectionMode="None"
-                                HorizontalScrollBarVisibility="Never">
-                    <CollectionView.ItemsLayout>
-                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="2"/>
-                    </CollectionView.ItemsLayout>
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="models:ClubSuggestionModel">
-                            <components1:ClubCard 
-                                ClubName="{Binding ClubName}"
-                                Subtitle="{Binding Subtitle}"
-                                ClubLogoSource="{Binding ClubLogoSource}"/>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                    <!-- ACTIVITY CHIPS -->
+                    <ScrollView Orientation="Horizontal"
+                                HorizontalScrollBarVisibility="Never"
+                                Margin="0,10">
+                        <HorizontalStackLayout Spacing="10" Padding="20,0">
+                            <components:ActivityChip Text="Bike" Icon="bike_white.png" IsSelected="True"
+                                TapCommand="{Binding NavigateToActivityCommand}" />
+                            <components:ActivityChip Text="Run" Icon="run_gray.png" IsSelected="False"
+                                TapCommand="{Binding NavigateToActivityCommand}" />
+                            <components:ActivityChip Text="Hike" Icon="hike_gray.png" IsSelected="False"
+                                TapCommand="{Binding NavigateToActivityCommand}" />
+                            <components:ActivityChip Text="Walk" Icon="run_gray.png" IsSelected="False"
+                                TapCommand="{Binding NavigateToActivityCommand}" />
+                            <components:ActivityChip Text="Swim" Icon="run_gray.png" IsSelected="False"
+                                TapCommand="{Binding NavigateToActivityCommand}" />
+                        </HorizontalStackLayout>
+                    </ScrollView>
 
-                <Label Text="Recent Activity" 
-                       FontAttributes="Bold" 
-                       FontSize="18" 
-                       Margin="20,15,20,5"
-                       TextColor="Black"/>
-            </VerticalStackLayout>
-        </CollectionView.Header>
+                    <!-- WELCOME -->
+                    <Label FontSize="30" Padding="20,0" Margin="0,10">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Welcome, " TextColor="Black" />
+                                <Span Text="{Binding UserName}" FontAttributes="Bold" TextColor="Black" />
+                                <Span Text="!" FontAttributes="Bold" TextColor="Black" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
 
-        <CollectionView.ItemsLayout>
-            <LinearItemsLayout Orientation="Vertical" ItemSpacing="15"/>
-        </CollectionView.ItemsLayout>
+                    <!-- CLUB SUGGESTIONS -->
+                    <ScrollView Orientation="Horizontal"
+                                HorizontalScrollBarVisibility="Never"
+                                Margin="0,5">
+                        <HorizontalStackLayout Spacing="0"
+                                               Padding="12,0"
+                                               BindableLayout.ItemsSource="{Binding ClubSuggestions}">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="models:ClubSuggestionModel">
+                                    <components1:ClubCard
+                                        ClubName="{Binding ClubName}"
+                                        Subtitle="{Binding Subtitle}"
+                                        ClubLogoSource="{Binding ClubLogoSource}"
+                                        DismissCommand="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:FeedViewModel}}, Path=RemoveClubCommand}"
+                                        JoinCommand="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:FeedViewModel}}, Path=JoinClubCommand}" />
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </HorizontalStackLayout>
+                    </ScrollView>
 
-        <CollectionView.ItemTemplate>
-            <DataTemplate x:DataType="models:ActivityCard">
-                <components1:ActivityCard 
-                    UserName="{Binding UserName}" 
-                    TapCommand="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:FeedViewModel}}, Path=OpenActivityCommand}"
-                    CommandParameter="{Binding .}" />
-            </DataTemplate>
-        </CollectionView.ItemTemplate>
+                    <!-- RECENT ACTIVITY -->
+                    <Label Text="Recent Activity"
+                           FontAttributes="Bold"
+                           FontSize="18"
+                           Margin="20,15,20,5"
+                           TextColor="Black" />
 
-        <CollectionView.Footer>
-            <BoxView HeightRequest="20" Color="Transparent"/>
-        </CollectionView.Footer>
-        
-    </CollectionView>
-    <components1:CustomTabBar
-        VerticalOptions="End"
-        ZIndex="10" />
+                </VerticalStackLayout>
+            </CollectionView.Header>
+
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="12" />
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:ActivityCardModel">
+                    <components1:ActivityCard
+                        UserName="{Binding UserName}"
+                        LocationDate="{Binding LocationDate}"
+                        ActivityTitle="{Binding Title}"
+                        Stat1Label="{Binding Stat1Label}"
+                        Stat1Value="{Binding Stat1Value}"
+                        Stat2Label="{Binding Stat2Label}"
+                        Stat2Value="{Binding Stat2Value}"
+                        MapImage="{Binding MapImage}"
+                        UserImage="{Binding UserImage}"
+                        TapCommand="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:FeedViewModel}}, Path=OpenActivityCommand}"
+                        CommandParameter="{Binding .}" />
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+            <CollectionView.Footer>
+                <BoxView HeightRequest="100" Color="#F5F5F7" />
+            </CollectionView.Footer>
+
+        </CollectionView>
+
+        <!-- TAB BAR -->
+        <components1:CustomTabBar
+            VerticalOptions="End"
+            ZIndex="10" />
+
+        <!-- SIDE MENU -->
+        <components1:Sidemenu
+            x:Name="Sidemenu"
+            ZIndex="20" />
     </Grid>
 </ContentPage>

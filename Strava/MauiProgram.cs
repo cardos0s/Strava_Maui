@@ -23,6 +23,17 @@ public static class MauiProgram
         builder.Services.AddTransient<FeedPage>();
         builder.Services.AddTransient<FeedViewModel>();
         
+        // ViewModels
+        builder.Services.AddTransient<Strava.ViewModels.FeedViewModel>();
+        builder.Services.AddTransient<Strava.ViewModels.ActivityDetailViewModel>();
+     
+        builder.Services.AddTransient<Strava.ViewModels.RecordingViewModel>();
+
+        // Pages
+        builder.Services.AddTransient<Strava.Views.FeedPage>();
+        builder.Services.AddTransient<Strava.Views.ActivityDetailPage>();
+        builder.Services.AddTransient<Strava.Views.RecordingPage>();
+
 #if DEBUG
         builder.Logging.AddDebug();
 #endif

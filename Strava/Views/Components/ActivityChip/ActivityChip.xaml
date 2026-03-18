@@ -3,21 +3,27 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Strava.Views.Components.ActivityChip.ActivityChip"
              x:Name="Root">
-    
+
     <Border StrokeShape="RoundRectangle 20"
             Padding="15,8"
             StrokeThickness="1"
-            Stroke="#E0E0E0"
-            BackgroundColor="White">
-        
+            Stroke="{Binding BorderColor, Source={x:Reference Root}}"
+            BackgroundColor="{Binding ChipBackground, Source={x:Reference Root}}">
+
+        <Border.GestureRecognizers>
+            <TapGestureRecognizer
+                Command="{Binding TapCommand, Source={x:Reference Root}}"
+                CommandParameter="{Binding Text, Source={x:Reference Root}}" />
+        </Border.GestureRecognizers>
+
         <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
             <Image Source="{Binding Icon, Source={x:Reference Root}}"
-                   HeightRequest="18"/>
+                   HeightRequest="18" />
 
             <Label Text="{Binding Text, Source={x:Reference Root}}"
                    FontSize="13"
                    FontAttributes="Bold"
-                   TextColor="#404040"/>
+                   TextColor="{Binding LabelColor, Source={x:Reference Root}}" />
         </HorizontalStackLayout>
     </Border>
 </ContentView>

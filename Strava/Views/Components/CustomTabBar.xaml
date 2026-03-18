@@ -1,88 +1,189 @@
-﻿<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Strava.Views.Components.CustomTabBar"
              BackgroundColor="Transparent">
 
-    <Grid HeightRequest="90" VerticalOptions="End" BackgroundColor="Transparent" IgnoreSafeArea="True">
-        
-        <Border BackgroundColor="White"
-                HeightRequest="65"
+    <Grid HeightRequest="300" VerticalOptions="End" Padding="20,0,20,16">
+
+        <!-- ACTIVITY PICKER POPUP -->
+        <Border x:Name="ActivityPicker"
+                StrokeShape="RoundRectangle 35"
+                BackgroundColor="White"
+                HorizontalOptions="Center"
                 VerticalOptions="End"
-                StrokeThickness="0">
+                Margin="160,20,0,25"
+                Padding="20"
+                HeightRequest="100"
+                WidthRequest="320"
+                StrokeThickness="0"
+                Opacity="0"
+                Scale="0.5"
+                IsVisible="False">
+
             <Border.Shadow>
-                <Shadow Brush="Black" Offset="0,-1" Opacity="0.1" Radius="5" />
+                <Shadow Brush="Black" Offset="0,4" Opacity="0.12" Radius="16" />
             </Border.Shadow>
 
-            <Grid ColumnDefinitions="*, *, 80, *, *" 
-                  VerticalOptions="Center" 
-                  HeightRequest="65">
-                
-                <Image x:Name="ImgHome"
-                       Grid.Column="0"
-                       Source="home_icon.png"
-                       HeightRequest="22"
-                       WidthRequest="22"
-                       VerticalOptions="Center"
-                       HorizontalOptions="Center">
-                    <Image.GestureRecognizers>
+            <HorizontalStackLayout Spacing="12">
+                <!-- Corrida -->
+                <Border StrokeShape="RoundRectangle 35"
+                        HeightRequest="85" WidthRequest="85"
+                        BackgroundColor="#F5F5F5"
+                        StrokeThickness="0">
+                    <Image Source="corrida.png" HeightRequest="45" WidthRequest="45"
+                           HorizontalOptions="Center" VerticalOptions="Center" />
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnRunSelected" />
+                    </Border.GestureRecognizers>
+                </Border>
+
+                <!-- Natação -->
+                <Border StrokeShape="RoundRectangle 35"
+                        HeightRequest="85" WidthRequest="85"
+                        BackgroundColor="#F5F5F5"
+                        StrokeThickness="0">
+                    <Image Source="swimming.png" HeightRequest="45" WidthRequest="45"
+                           HorizontalOptions="Center" VerticalOptions="Center" />
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnSwimSelected" />
+                    </Border.GestureRecognizers>
+                </Border>
+
+                <!-- Ciclismo -->
+                <Border StrokeShape="RoundRectangle 35"
+                        HeightRequest="85" WidthRequest="85"
+                        BackgroundColor="#F5F5F5"
+                        StrokeThickness="0">
+                    <Image Source="ciclismo.png" HeightRequest="45" WidthRequest="45"
+                           HorizontalOptions="Center" VerticalOptions="Center" />
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnBikeSelected" />
+                    </Border.GestureRecognizers>
+                </Border>
+            </HorizontalStackLayout>
+        </Border>
+
+        <!-- FLOATING TAB BAR -->
+        <Border StrokeShape="RoundRectangle 30"
+                BackgroundColor="White"
+                HeightRequest="65"
+                VerticalOptions="End"
+                StrokeThickness="0"
+                Padding="0">
+
+            <Border.Shadow>
+                <Shadow Brush="Black" Offset="0,4" Opacity="0.12" Radius="20" />
+            </Border.Shadow>
+
+            <Grid ColumnDefinitions="*, *, 70, *, *"
+                  VerticalOptions="Center"
+                  Padding="8,0">
+
+                <!-- Home -->
+                <VerticalStackLayout Grid.Column="0"
+                                     HorizontalOptions="Center"
+                                     VerticalOptions="Center"
+                                     Spacing="4">
+                    <Image x:Name="ImgHome"
+                           Source="home_b.png"
+                           HeightRequest="22" WidthRequest="22"
+                           HorizontalOptions="Center" />
+                    <Border x:Name="DotHome"
+                            StrokeShape="RoundRectangle 3"
+                            BackgroundColor="#FC5200"
+                            HeightRequest="6" WidthRequest="6"
+                            StrokeThickness="0"
+                            HorizontalOptions="Center"
+                            IsVisible="False" />
+                    <VerticalStackLayout.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnHomeClicked" />
-                    </Image.GestureRecognizers>
-                </Image>
-                
-                <Image x:Name="ImgMaps"
-                       Grid.Column="1" 
-                       Source="share_icon.png" 
-                       HeightRequest="22"
-                       WidthRequest="22" 
-                       VerticalOptions="Center"
-                       HorizontalOptions="Center">
-                    <Image.GestureRecognizers>
+                    </VerticalStackLayout.GestureRecognizers>
+                </VerticalStackLayout>
+
+                <!-- Maps -->
+                <VerticalStackLayout Grid.Column="1"
+                                     HorizontalOptions="Center"
+                                     VerticalOptions="Center"
+                                     Spacing="4">
+                    <Image x:Name="ImgMaps"
+                           Source="share_icon.png"
+                           HeightRequest="22" WidthRequest="22"
+                           HorizontalOptions="Center" />
+                    <Border x:Name="DotMaps"
+                            StrokeShape="RoundRectangle 3"
+                            BackgroundColor="#FC5200"
+                            HeightRequest="6" WidthRequest="6"
+                            StrokeThickness="0"
+                            HorizontalOptions="Center"
+                            IsVisible="False" />
+                    <VerticalStackLayout.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnMapsClicked" />
-                    </Image.GestureRecognizers>
-                </Image>
+                    </VerticalStackLayout.GestureRecognizers>
+                </VerticalStackLayout>
 
-
-                <Image x:Name="ImgGroups"
-                       Grid.Column="3" 
-                       Source="group_icon.png" 
-                       HeightRequest="22"
-                       WidthRequest="22" 
-                       VerticalOptions="Center"
-                       HorizontalOptions="Center">
-                    <Image.GestureRecognizers>
+                <!-- Groups -->
+                <VerticalStackLayout Grid.Column="3"
+                                     HorizontalOptions="Center"
+                                     VerticalOptions="Center"
+                                     Spacing="4">
+                    <Image x:Name="ImgGroups"
+                           Source="group_icon.png"
+                           HeightRequest="22" WidthRequest="22"
+                           HorizontalOptions="Center" />
+                    <Border x:Name="DotGroups"
+                            StrokeShape="RoundRectangle 3"
+                            BackgroundColor="#FC5200"
+                            HeightRequest="6" WidthRequest="6"
+                            StrokeThickness="0"
+                            HorizontalOptions="Center"
+                            IsVisible="False" />
+                    <VerticalStackLayout.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnGroupsClicked" />
-                    </Image.GestureRecognizers>
-                </Image>
+                    </VerticalStackLayout.GestureRecognizers>
+                </VerticalStackLayout>
 
-                <Image x:Name="ImgProfile"
-                       Grid.Column="4" 
-                       Source="profile_icon.png" 
-                       HeightRequest="22" 
-                       WidthRequest="22"
-                       VerticalOptions="Center"
-                       HorizontalOptions="Center">
-                    <Image.GestureRecognizers>
+                <!-- Profile -->
+                <VerticalStackLayout Grid.Column="4"
+                                     HorizontalOptions="Center"
+                                     VerticalOptions="Center"
+                                     Spacing="4">
+                    <Image x:Name="ImgProfile"
+                           Source="profile_icon.png"
+                           HeightRequest="22" WidthRequest="22"
+                           HorizontalOptions="Center" />
+                    <Border x:Name="DotProfile"
+                            StrokeShape="RoundRectangle 3"
+                            BackgroundColor="#FC5200"
+                            HeightRequest="6" WidthRequest="6"
+                            StrokeThickness="0"
+                            HorizontalOptions="Center"
+                            IsVisible="False" />
+                    <VerticalStackLayout.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnProfileClicked" />
-                    </Image.GestureRecognizers>
-                </Image>
+                    </VerticalStackLayout.GestureRecognizers>
+                </VerticalStackLayout>
             </Grid>
         </Border>
 
-        <Grid Grid.Column="0" HorizontalOptions="Center" VerticalOptions="Start" TranslationY="0">
-            <Ellipse Fill="#FC5200" 
-                     HeightRequest="60" 
-                     WidthRequest="60" 
-                     HorizontalOptions="Center" 
-                     VerticalOptions="Center">
-                <Ellipse.Shadow>
-                    <Shadow Brush="#FC5200" Opacity="0.3" Radius="8" Offset="0,4" />
-                </Ellipse.Shadow>
-            </Ellipse>
-            
-            <Image Source="play_white.png" 
-                   WidthRequest="22" 
-                   HorizontalOptions="Center" 
-                   VerticalOptions="Center"/>
+        <!-- Botão Record flutuante -->
+        <Grid x:Name="RecordButton"
+              HorizontalOptions="Center"
+              VerticalOptions="End"
+              Margin="0,0,0,20"
+              HeightRequest="52" WidthRequest="52">
+
+            <Ellipse x:Name="RecordEllipse"
+                     Fill="#FC5200"
+                     HeightRequest="52" WidthRequest="52"
+                     HorizontalOptions="Center" VerticalOptions="Center" />
+
+            <Label x:Name="RecordIcon"
+                   Text="▶"
+                   FontSize="16"
+                   TextColor="White"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center" />
 
             <Grid.GestureRecognizers>
                 <TapGestureRecognizer Tapped="OnRecordTapped" />

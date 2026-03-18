@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Strava.ViewModels"
+             x:Class="Strava.Views.RecordingPage"
+             x:DataType="viewmodels:RecordingViewModel"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#1C1C1E"
+             xmlns:android="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;assembly=Microsoft.Maui.Controls">
+
+    <Grid RowDefinitions="*, Auto, Auto" Padding="0">
+
+        <!-- BACKGROUND IMAGE (muda por atividade) -->
+        <Image Source="{Binding BackgroundImage}"
+               Aspect="AspectFill"
+               Opacity="0.35"
+               Grid.RowSpan="3"
+               VerticalOptions="Fill"
+               HorizontalOptions="Fill" />
+
+        <!-- Botão fechar -->
+        <Border StrokeShape="RoundRectangle 20"
+                HeightRequest="40" WidthRequest="40"
+                BackgroundColor="#00000066"
+                StrokeThickness="0"
+                Margin="16,50,0,0"
+                HorizontalOptions="Start"
+                VerticalOptions="Start">
+            <Label Text="✕"
+                   FontSize="18" TextColor="White"
+                   HorizontalOptions="Center" VerticalOptions="Center" />
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnCloseTapped" />
+            </Border.GestureRecognizers>
+        </Border>
+
+        <!-- MAIN STATS -->
+        <VerticalStackLayout Grid.Row="0"
+                             VerticalOptions="Center"
+                             HorizontalOptions="Center"
+                             Spacing="4">
+
+            <!-- Distance -->
+            <Label Text="{Binding DistanceDisplay}"
+                   FontSize="80"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   HorizontalTextAlignment="Center"
+                   LineHeight="0.9" />
+
+            <Label Text="{Binding UnitLabel}"
+                   FontSize="16"
+                   TextColor="#CCCCCC"
+                   HorizontalTextAlignment="Center"
+                   Margin="0,0,0,30" />
+
+            <!-- Stats row: Pace | BPM | Tempo -->
+            <Grid ColumnDefinitions="*, *, *"
+                  HorizontalOptions="Center"
+                  WidthRequest="300"
+                  Margin="0,10">
+
+                <!-- Pace -->
+                <VerticalStackLayout HorizontalOptions="Center">
+                    <Label Text="Pace"
+                           FontSize="12"
+                           TextColor="#999"
+                           HorizontalTextAlignment="Center" />
+                    <Label Text="{Binding PaceDisplay}"
+                           FontSize="22"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+
+                <!-- BPM -->
+                <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center">
+                    <Label Text="BPM"
+                           FontSize="12"
+                           TextColor="#999"
+                           HorizontalTextAlignment="Center" />
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="4">
+                        <Label Text="❤️" FontSize="14" VerticalOptions="Center" />
+                        <Label Text="{Binding BpmDisplay}"
+                               FontSize="22"
+                               FontAttributes="Bold"
+                               TextColor="White" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+
+                <!-- Tempo -->
+                <VerticalStackLayout Grid.Column="2" HorizontalOptions="Center">
+                    <Label Text="Tempo"
+                           FontSize="12"
+                           TextColor="#999"
+                           HorizontalTextAlignment="Center" />
+                    <Label Text="{Binding TimeDisplay}"
+                           FontSize="22"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+            </Grid>
+        </VerticalStackLayout>
+
+        <!-- PAUSE BUTTON + indicators -->
+        <VerticalStackLayout Grid.Row="1"
+                             Spacing="12"
+                             HorizontalOptions="Center"
+                             Margin="0,0,0,20">
+
+            <Grid HeightRequest="70" WidthRequest="70"
+                  HorizontalOptions="Center">
+                <Ellipse Fill="#FC5200"
+                         HeightRequest="70" WidthRequest="70"
+                         HorizontalOptions="Center" VerticalOptions="Center" />
+
+                <Label Text="{Binding ButtonText}"
+                       FontSize="13"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center" />
+
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnPauseTapped" />
+                </Grid.GestureRecognizers>
+            </Grid>
+
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="6">
+                <Ellipse Fill="#FC5200" HeightRequest="8" WidthRequest="8" />
+                <Ellipse Fill="#666" HeightRequest="8" WidthRequest="8" />
+                <Ellipse Fill="#666" HeightRequest="8" WidthRequest="8" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+
+        <!-- MUSIC BUTTON -->
+        <Border Grid.Row="2"
+                StrokeShape="RoundRectangle 25"
+                BackgroundColor="White"
+                HeightRequest="50"
+                Margin="40,0,40,40"
+                StrokeThickness="0">
+            <Label Text="Conectar-se a música"
+                   FontSize="14"
+                   FontAttributes="Bold"
+                   TextColor="Black"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center" />
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnMusicTapped" />
+            </Border.GestureRecognizers>
+        </Border>
+
+    </Grid>
+</ContentPage>

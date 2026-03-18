@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Windows.Input;
 
 namespace Strava.Views.Components.ActivityChip;
 
@@ -11,10 +7,11 @@ public partial class ActivityChip : ContentView
     public ActivityChip()
     {
         InitializeComponent();
-        UpdateVisualState();
     }
+
+    // Text
     public static readonly BindableProperty TextProperty =
-        BindableProperty.Create(nameof(Text), typeof(string), typeof(ActivityChip));
+        BindableProperty.Create(nameof(Text), typeof(string), typeof(ActivityChip), string.Empty);
 
     public string Text
     {
@@ -22,9 +19,9 @@ public partial class ActivityChip : ContentView
         set => SetValue(TextProperty, value);
     }
 
-    // Ícone
+    // Icon
     public static readonly BindableProperty IconProperty =
-        BindableProperty.Create(nameof(Icon), typeof(string), typeof(ActivityChip));
+        BindableProperty.Create(nameof(Icon), typeof(string), typeof(ActivityChip), string.Empty);
 
     public string Icon
     {
@@ -32,15 +29,11 @@ public partial class ActivityChip : ContentView
         set => SetValue(IconProperty, value);
     }
 
-    // Seleção
+    // IsSelected
     public static readonly BindableProperty IsSelectedProperty =
         BindableProperty.Create(
-            nameof(IsSelected),
-            typeof(bool),
-            typeof(ActivityChip),
-            false,
-            propertyChanged: (_, __, ___) => ((ActivityChip)_)!.UpdateVisualState()
-        );
+            nameof(IsSelected), typeof(bool), typeof(ActivityChip), false,
+            propertyChanged: (b, _, _) => ((ActivityChip)b).UpdateVisualState());
 
     public bool IsSelected
     {
@@ -48,13 +41,25 @@ public partial class ActivityChip : ContentView
         set => SetValue(IsSelectedProperty, value);
     }
 
-    // Cores derivadas do estado
+    // TapCommand
+    public static readonly BindableProperty TapCommandProperty =
+        BindableProperty.Create(nameof(TapCommand), typeof(ICommand), typeof(ActivityChip));
+
+    public ICommand TapCommand
+    {
+        get => (ICommand)GetValue(TapCommandProperty);
+        set => SetValue(TapCommandProperty, value);
+    }
+
+    // Computed colors
     public Color ChipBackground => IsSelected ? Color.FromArgb("#FC4C02") : Colors.White;
-    public Color TextColor => IsSelected ? Colors.White : Colors.Gray;
+    public Color LabelColor => IsSelected ? Colors.White : Color.FromArgb("#666666");
+    public Color BorderColor => IsSelected ? Color.FromArgb("#FC4C02") : Color.FromArgb("#E0E0E0");
 
     private void UpdateVisualState()
     {
         OnPropertyChanged(nameof(ChipBackground));
-        OnPropertyChanged(nameof(TextColor));
+        OnPropertyChanged(nameof(LabelColor));
+        OnPropertyChanged(nameof(BorderColor));
     }
 }

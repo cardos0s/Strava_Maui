@@ -1,26 +1,256 @@
-﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Strava.Views.MapPage"
-             Title="Explorar">
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#F5F5F5">
 
     <Grid>
+        <!-- Mapa fullscreen -->
         <WebView x:Name="MapWebView"
                  HorizontalOptions="Fill"
                  VerticalOptions="Fill" />
 
-        <Border VerticalOptions="End" 
-                HorizontalOptions="Center" 
-                Margin="0,0,0,110"
-                BackgroundColor="#FC5200"
-                StrokeShape="RoundRectangle 20"
-                Padding="25,12">
+        <!-- Botão voltar -->
+        <Border StrokeShape="RoundRectangle 20"
+                HeightRequest="40" WidthRequest="40"
+                BackgroundColor="White"
+                StrokeThickness="0"
+                Margin="16,50,0,0"
+                HorizontalOptions="Start"
+                VerticalOptions="Start">
             <Border.Shadow>
-                <Shadow Brush="Black" Offset="0,4" Opacity="0.2" Radius="5"/>
+                <Shadow Brush="Black" Offset="0,2" Opacity="0.1" Radius="8" />
             </Border.Shadow>
-            
-            <Label Text="INICIAR ROTA" 
-                   TextColor="White" 
-                   FontAttributes="Bold"/>
+            <Image Source="arrow_back.png"
+                   HeightRequest="18" WidthRequest="18"
+                   HorizontalOptions="Center" VerticalOptions="Center" />
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnBackTapped" />
+            </Border.GestureRecognizers>
+        </Border>
+
+        <!-- Botão iniciar rota -->
+        <Border x:Name="BtnStartRoute"
+                VerticalOptions="End"
+                HorizontalOptions="Center"
+                Margin="0,0,0,40"
+                BackgroundColor="#FC5200"
+                StrokeShape="RoundRectangle 28"
+                StrokeThickness="0"
+                Padding="30,14">
+            <Border.Shadow>
+                <Shadow Brush="#FC5200" Offset="0,4" Opacity="0.3" Radius="12" />
+            </Border.Shadow>
+            <Label Text="START ROUTE"
+                   TextColor="White"
+                   FontAttributes="Bold"
+                   FontSize="14" />
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnStartRouteTapped" />
+            </Border.GestureRecognizers>
+        </Border>
+
+        <!-- OVERLAY escuro -->
+        <BoxView x:Name="Overlay"
+                 BackgroundColor="Black"
+                 Opacity="0"
+                 IsVisible="False"
+                 InputTransparent="False">
+            <BoxView.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnCloseSheet" />
+            </BoxView.GestureRecognizers>
+        </BoxView>
+
+        <!-- BOTTOM SHEET -->
+        <Border x:Name="BottomSheet"
+                BackgroundColor="White"
+                StrokeShape="RoundRectangle 28,28,0,0"
+                StrokeThickness="0"
+                VerticalOptions="End"
+                TranslationY="700"
+                Padding="0">
+
+            <VerticalStackLayout Spacing="0">
+
+                <!-- Handle bar + Close -->
+                <Grid Padding="20,16,20,12">
+                    <Border StrokeShape="RoundRectangle 3"
+                            HeightRequest="4" WidthRequest="40"
+                            BackgroundColor="#E0E0E0"
+                            StrokeThickness="0"
+                            HorizontalOptions="Center" />
+                    <Border StrokeShape="RoundRectangle 15"
+                            HeightRequest="30" WidthRequest="30"
+                            BackgroundColor="#F5F5F5"
+                            StrokeThickness="0"
+                            HorizontalOptions="End">
+                        <Label Text="✕"
+                               FontSize="14" TextColor="#999"
+                               HorizontalOptions="Center" VerticalOptions="Center" />
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnCloseSheet" />
+                        </Border.GestureRecognizers>
+                    </Border>
+                </Grid>
+
+                <!-- Título -->
+                <Label Text="Route Settings"
+                       FontSize="18" FontAttributes="Bold"
+                       TextColor="Black"
+                       Padding="24,0,24,16" />
+
+                <!-- Ghost Mode -->
+                <Border StrokeShape="RoundRectangle 16"
+                        BackgroundColor="#FAFAFA"
+                        Margin="16,4"
+                        Padding="14"
+                        StrokeThickness="0">
+                    <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="14">
+                        <Border StrokeShape="RoundRectangle 12"
+                                HeightRequest="42" WidthRequest="42"
+                                BackgroundColor="#F0E6FF" StrokeThickness="0">
+                            <Label Text="👻" FontSize="20"
+                                   HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                            <Label Text="Ghost Mode" FontSize="14" FontAttributes="Bold" TextColor="#1C1C1E" />
+                            <Label Text="Stay invisible to others" FontSize="11" TextColor="#999" />
+                        </VerticalStackLayout>
+                        <Switch Grid.Column="2" OnColor="#FC5200" IsToggled="True" VerticalOptions="Center" />
+                    </Grid>
+                </Border>
+
+                <!-- Live Mode -->
+                <Border StrokeShape="RoundRectangle 16"
+                        BackgroundColor="#FAFAFA"
+                        Margin="16,4"
+                        Padding="14"
+                        StrokeThickness="0">
+                    <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="14">
+                        <Border StrokeShape="RoundRectangle 12"
+                                HeightRequest="42" WidthRequest="42"
+                                BackgroundColor="#E3F2FD" StrokeThickness="0">
+                            <Label Text="📡" FontSize="20"
+                                   HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                            <Label Text="Live Mode" FontSize="14" FontAttributes="Bold" TextColor="#1C1C1E" />
+                            <Label Text="Share live activity" FontSize="11" TextColor="#999" />
+                        </VerticalStackLayout>
+                        <Switch Grid.Column="2" OnColor="#FC5200" IsToggled="False" VerticalOptions="Center" />
+                    </Grid>
+                </Border>
+
+                <!-- Beacon -->
+                <Border StrokeShape="RoundRectangle 16"
+                        BackgroundColor="#FAFAFA"
+                        Margin="16,4"
+                        Padding="14"
+                        StrokeThickness="0">
+                    <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="14">
+                        <Border StrokeShape="RoundRectangle 12"
+                                HeightRequest="42" WidthRequest="42"
+                                BackgroundColor="#FFEBEE" StrokeThickness="0">
+                            <Label Text="📍" FontSize="20"
+                                   HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                            <Label Text="Beacon" FontSize="14" FontAttributes="Bold" TextColor="#1C1C1E" />
+                            <Label Text="Connect to share location" FontSize="11" TextColor="#999" />
+                        </VerticalStackLayout>
+                        <Switch Grid.Column="2" OnColor="#FC5200" IsToggled="False" VerticalOptions="Center" />
+                    </Grid>
+                </Border>
+
+                <!-- Auto-Pause -->
+                <Border StrokeShape="RoundRectangle 16"
+                        BackgroundColor="#FAFAFA"
+                        Margin="16,4"
+                        Padding="14"
+                        StrokeThickness="0">
+                    <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="14">
+                        <Border StrokeShape="RoundRectangle 12"
+                                HeightRequest="42" WidthRequest="42"
+                                BackgroundColor="#FFF3E0" StrokeThickness="0">
+                            <Label Text="⏸" FontSize="20"
+                                   HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                            <Label Text="Auto-Pause" FontSize="14" FontAttributes="Bold" TextColor="#1C1C1E" />
+                            <Label Text="Pause when you stop" FontSize="11" TextColor="#999" />
+                        </VerticalStackLayout>
+                        <Switch Grid.Column="2" OnColor="#FC5200" IsToggled="False" VerticalOptions="Center" />
+                    </Grid>
+                </Border>
+
+                <!-- Audio Cues -->
+                <Border StrokeShape="RoundRectangle 16"
+                        BackgroundColor="#FAFAFA"
+                        Margin="16,4"
+                        Padding="14"
+                        StrokeThickness="0">
+                    <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="14">
+                        <Border StrokeShape="RoundRectangle 12"
+                                HeightRequest="42" WidthRequest="42"
+                                BackgroundColor="#E8F5E9" StrokeThickness="0">
+                            <Label Text="🔊" FontSize="20"
+                                   HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                            <Label Text="Audio Cues" FontSize="14" FontAttributes="Bold" TextColor="#1C1C1E" />
+                            <Label Text="Hear progress updates" FontSize="11" TextColor="#999" />
+                        </VerticalStackLayout>
+                        <Switch Grid.Column="2" OnColor="#FC5200" IsToggled="False" VerticalOptions="Center" />
+                    </Grid>
+                </Border>
+
+                <!-- Screen Lock -->
+                <Border StrokeShape="RoundRectangle 16"
+                        BackgroundColor="#FAFAFA"
+                        Margin="16,4"
+                        Padding="14"
+                        StrokeThickness="0">
+                    <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="14">
+                        <Border StrokeShape="RoundRectangle 12"
+                                HeightRequest="42" WidthRequest="42"
+                                BackgroundColor="#FFFDE7" StrokeThickness="0">
+                            <Label Text="🔒" FontSize="20"
+                                   HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                            <Label Text="Screen Lock" FontSize="14" FontAttributes="Bold" TextColor="#1C1C1E" />
+                            <Label Text="Disable screen taps" FontSize="11" TextColor="#999" />
+                        </VerticalStackLayout>
+                        <Switch Grid.Column="2" OnColor="#FC5200" IsToggled="False" VerticalOptions="Center" />
+                    </Grid>
+                </Border>
+
+                <!-- Connect Device -->
+                <Border StrokeShape="RoundRectangle 16"
+                        BackgroundColor="#FAFAFA"
+                        Margin="16,4,16,8"
+                        Padding="14"
+                        StrokeThickness="0">
+                    <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="14">
+                        <Border StrokeShape="RoundRectangle 12"
+                                HeightRequest="42" WidthRequest="42"
+                                BackgroundColor="#FCE4EC" StrokeThickness="0">
+                            <Label Text="⌚" FontSize="20"
+                                   HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                            <Label Text="Connect Device" FontSize="14" FontAttributes="Bold" TextColor="#1C1C1E" />
+                            <Label Text="Link your device" FontSize="11" TextColor="#999" />
+                        </VerticalStackLayout>
+                        <Label Grid.Column="2" Text="›" FontSize="20" TextColor="#CCC" VerticalOptions="Center" />
+                    </Grid>
+                </Border>
+
+                <!-- Bottom padding -->
+                <BoxView HeightRequest="30" Color="Transparent" />
+
+            </VerticalStackLayout>
         </Border>
     </Grid>
 </ContentPage>

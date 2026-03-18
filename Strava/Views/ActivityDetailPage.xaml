@@ -1,0 +1,370 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Strava.ViewModels"
+             xmlns:models="clr-namespace:Strava.Models"
+             x:Class="Strava.Views.ActivityDetailPage"
+             x:DataType="viewmodels:ActivityDetailViewModel"
+             BackgroundColor="#F2F2F7"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView VerticalScrollBarVisibility="Never">
+        <VerticalStackLayout Spacing="16" Padding="0,0,0,30">
+
+            <!-- TOP BAR: back + chips -->
+            <Grid ColumnDefinitions="Auto, *" Padding="16,50,16,0">
+                <Border StrokeShape="RoundRectangle 18"
+                        HeightRequest="36" WidthRequest="36"
+                        StrokeThickness="0"
+                        BackgroundColor="White">
+                    <Image Source="usain_bolt"
+                           Aspect="AspectFill"
+                           HorizontalOptions="Center" VerticalOptions="Center" />
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnBackTapped" />
+                    </Border.GestureRecognizers>
+                </Border>
+
+                <ScrollView Grid.Column="1"
+                            Orientation="Horizontal"
+                            HorizontalScrollBarVisibility="Never"
+                            Margin="12,0,0,0">
+                    <HorizontalStackLayout Spacing="8">
+                        <Border StrokeShape="RoundRectangle 18"
+                                Padding="14,7"
+                                BackgroundColor="{Binding ChipColor}"
+                                StrokeThickness="0">
+                            <HorizontalStackLayout Spacing="6">
+                                <Image Source="bike_white.png" HeightRequest="16" />
+                                <Label Text="{Binding ActivityType}"
+                                       FontSize="13" FontAttributes="Bold"
+                                       TextColor="White" />
+                            </HorizontalStackLayout>
+                        </Border>
+
+                        <Border StrokeShape="RoundRectangle 18"
+                                Padding="14,7"
+                                BackgroundColor="White"
+                                Stroke="#E0E0E0" StrokeThickness="1">
+                            <HorizontalStackLayout Spacing="6">
+                                <Image Source="run_gray.png" HeightRequest="16" />
+                                <Label Text="Run" FontSize="13" TextColor="#888" />
+                            </HorizontalStackLayout>
+                        </Border>
+
+                        <Border StrokeShape="RoundRectangle 18"
+                                Padding="14,7"
+                                BackgroundColor="White"
+                                Stroke="#E0E0E0" StrokeThickness="1">
+                            <HorizontalStackLayout Spacing="6">
+                                <Image Source="hike_gray.png" HeightRequest="16" />
+                                <Label Text="Hike" FontSize="13" TextColor="#888" />
+                            </HorizontalStackLayout>
+                        </Border>
+
+                        <Border StrokeShape="RoundRectangle 18"
+                                Padding="14,7"
+                                BackgroundColor="White"
+                                Stroke="#E0E0E0" StrokeThickness="1">
+                            <HorizontalStackLayout Spacing="6">
+                                <Image Source="run_gray.png" HeightRequest="16" />
+                                <Label Text="Walk" FontSize="13" TextColor="#888" />
+                            </HorizontalStackLayout>
+                        </Border>
+                    </HorizontalStackLayout>
+                </ScrollView>
+            </Grid>
+
+            <!-- TODAY SECTION -->
+            <Grid Padding="20,10,20,0" ColumnDefinitions="*, Auto">
+                <Label Text="Today"
+                       FontSize="22" FontAttributes="Bold" TextColor="Black" />
+                <Label Grid.Column="1" Text="›"
+                       FontSize="22" TextColor="#CCCCCC"
+                       VerticalOptions="Center" />
+            </Grid>
+
+            <!-- Today Activity Card -->
+            <Border StrokeShape="RoundRectangle 20"
+                    BackgroundColor="#1C1C1E"
+                    Margin="20,0"
+                    Padding="0"
+                    StrokeThickness="0"
+                    HeightRequest="200">
+                <Grid>
+                    <Image Source="{Binding TodayActivity.MapImage}"
+                           Aspect="AspectFill"
+                           Opacity="0.6" />
+
+                    <VerticalStackLayout VerticalOptions="End" Padding="16">
+                        <HorizontalStackLayout Spacing="8">
+                            <Border StrokeShape="RoundRectangle 12"
+                                    HeightRequest="24" WidthRequest="24"
+                                    StrokeThickness="0">
+                                <Image Source="{Binding TodayActivity.UserImage}"
+                                       Aspect="AspectFill" />
+                            </Border>
+                            <Label Text="{Binding TodayActivity.UserName}"
+                                   FontSize="12" TextColor="White"
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+
+                        <Grid ColumnDefinitions="*, Auto" Margin="0,8,0,0">
+                            <HorizontalStackLayout Spacing="12">
+                                <Label FontSize="11" TextColor="#CCCCCC">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="{Binding TodayActivity.Stat1Value}"
+                                                  FontAttributes="Bold" TextColor="White" />
+                                            <Span Text=" " />
+                                            <Span Text="{Binding TodayActivity.Stat1Label}" />
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                                <Label FontSize="11" TextColor="#CCCCCC">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="{Binding TodayActivity.Stat2Value}"
+                                                  FontAttributes="Bold" TextColor="White" />
+                                            <Span Text=" " />
+                                            <Span Text="{Binding TodayActivity.Stat2Label}" />
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                            </HorizontalStackLayout>
+
+                            <Border Grid.Column="1"
+                                    StrokeShape="RoundRectangle 14"
+                                    BackgroundColor="#FC5200"
+                                    Padding="14,7"
+                                    StrokeThickness="0">
+                                <Label Text="Start Ride"
+                                       FontSize="12" FontAttributes="Bold"
+                                       TextColor="White"
+                                       HorizontalOptions="Center" />
+                            </Border>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+
+            <!-- THIS WEEK SECTION -->
+            <Grid Padding="20,5,20,0" ColumnDefinitions="*, Auto">
+                <Label Text="This week"
+                       FontSize="22" FontAttributes="Bold" TextColor="Black" />
+                <Label Grid.Column="1" Text="›"
+                       FontSize="22" TextColor="#CCCCCC"
+                       VerticalOptions="Center" />
+            </Grid>
+
+            <!-- Week Race Cards -->
+            <ScrollView Orientation="Horizontal"
+                        HorizontalScrollBarVisibility="Never"
+                        Margin="0,0">
+                <HorizontalStackLayout Spacing="12" Padding="20,0"
+                                       BindableLayout.ItemsSource="{Binding WeekRaces}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="models:RaceCardModel">
+                            <Border StrokeShape="RoundRectangle 18"
+                                    BackgroundColor="#1C1C1E"
+                                    HeightRequest="180"
+                                    WidthRequest="170"
+                                    Padding="0"
+                                    StrokeThickness="0">
+                                <Grid>
+                                    <Image Source="{Binding ImageSource}"
+                                           Aspect="AspectFill"
+                                           Opacity="0.5" />
+
+                                    <VerticalStackLayout VerticalOptions="End" Padding="12">
+                                        <Border StrokeShape="RoundRectangle 12"
+                                                BackgroundColor="#FC5200"
+                                                Padding="10,5"
+                                                StrokeThickness="0"
+                                                HorizontalOptions="Start"
+                                                Margin="0,0,0,8">
+                                            <Label Text="Join Race"
+                                                   FontSize="11" FontAttributes="Bold"
+                                                   TextColor="White" />
+                                        </Border>
+
+                                        <HorizontalStackLayout Spacing="4">
+                                            <Label Text="📍" FontSize="10" />
+                                            <Label Text="{Binding Location}"
+                                                   FontSize="10" TextColor="#CCCCCC" />
+                                        </HorizontalStackLayout>
+
+                                        <Label FontSize="10" TextColor="#AAAAAA" Margin="0,2,0,0">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="{Binding Distance}" FontAttributes="Bold"
+                                                          TextColor="White" />
+                                                    <Span Text=" · " />
+                                                    <Span Text="{Binding Location}" />
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </HorizontalStackLayout>
+            </ScrollView>
+
+            <!-- STREAK CARD COM FOGUINHOS -->
+            <Border StrokeShape="RoundRectangle 20"
+                    BackgroundColor="White"
+                    Margin="20,0"
+                    Padding="16,20"
+                    Stroke="#F0F0F0"
+                    StrokeThickness="1">
+
+                <Grid RowDefinitions="Auto, Auto, Auto" RowSpacing="12">
+
+                    <!-- Foguinhos -->
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="12"
+                                           BindableLayout.ItemsSource="{Binding StreakDays}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="viewmodels:StreakDay">
+                                <Label Text="🔥"
+                                       FontSize="24"
+                                       Opacity="{Binding FireOpacity}"
+                                       HorizontalOptions="Center" />
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </HorizontalStackLayout>
+
+                    <!-- X button -->
+                    <Label Grid.Row="0"
+                           Text="✕"
+                           FontSize="14" TextColor="#CCC"
+                           HorizontalOptions="End"
+                           VerticalOptions="Start" />
+
+                    <!-- Mensagem -->
+                    <Label Grid.Row="1"
+                           HorizontalTextAlignment="Center"
+                           FontSize="13"
+                           TextColor="#555"
+                           LineHeight="1.3">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Complete " />
+                                <Span Text="4 more"
+                                      FontAttributes="Bold"
+                                      TextColor="#FC5200" />
+                                <Span Text=" workouts this week to" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+
+                    <Label Grid.Row="2"
+                           Text="start your streak"
+                           HorizontalTextAlignment="Center"
+                           FontSize="13"
+                           TextColor="#555" />
+                </Grid>
+            </Border>
+
+           <!-- QUICK ACTIONS -->
+            <ScrollView Orientation="Horizontal"
+                        HorizontalScrollBarVisibility="Never">
+                <HorizontalStackLayout Spacing="12" Padding="20,0">
+
+                    <!-- Add Friend -->
+                    <Border StrokeShape="RoundRectangle 18"
+                            BackgroundColor="#1C1C1E"
+                            WidthRequest="170" HeightRequest="190"
+                            Padding="16,18,16,14"
+                            StrokeThickness="0">
+                        <VerticalStackLayout Spacing="10" VerticalOptions="Center">
+                            <Grid HorizontalOptions="Start" HeightRequest="55">
+                                <Border StrokeShape="RoundRectangle 20"
+                                        HeightRequest="40" WidthRequest="40"
+                                        Stroke="White" StrokeThickness="2"
+                                        TranslationX="0"
+                                        VerticalOptions="End">
+                                    <Image Source="sarah.jpg" Aspect="AspectFill" />
+                                </Border>
+                                <Border StrokeShape="RoundRectangle 20"
+                                        HeightRequest="40" WidthRequest="40"
+                                        Stroke="White" StrokeThickness="2"
+                                        TranslationX="28"
+                                        VerticalOptions="End">
+                                    <Image Source="jonh.jpg" Aspect="AspectFill" />
+                                </Border>
+                                <Border StrokeShape="RoundRectangle 20"
+                                        HeightRequest="40" WidthRequest="40"
+                                        Stroke="White" StrokeThickness="2"
+                                        TranslationX="56"
+                                        VerticalOptions="End">
+                                    <Image Source="dotnet_bot.png" Aspect="AspectFill" />
+                                </Border>
+                                <Border StrokeShape="RoundRectangle 14"
+                                        HeightRequest="28" WidthRequest="28"
+                                        BackgroundColor="#00C9A7"
+                                        StrokeThickness="0"
+                                        TranslationX="82"
+                                        HorizontalOptions="Start"
+                                        VerticalOptions="Start">
+                                    <Label Text="+" FontSize="16" FontAttributes="Bold"
+                                           TextColor="White"
+                                           HorizontalOptions="Center" VerticalOptions="Center" />
+                                </Border>
+                            </Grid>
+
+                            <Label Text="Add Friend"
+                                   FontSize="14" FontAttributes="Bold" TextColor="White" />
+                            <Label Text="Find nearby cyclists"
+                                   FontSize="10" TextColor="#999" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Find Route -->
+                    <Border StrokeShape="RoundRectangle 18"
+                            BackgroundColor="#2D4A3E"
+                            WidthRequest="170" HeightRequest="190"
+                            Padding="16,18,16,14"
+                            StrokeThickness="0">
+                        <VerticalStackLayout Spacing="10" VerticalOptions="Center">
+                            <Grid HorizontalOptions="Start" HeightRequest="55">
+                                <Border StrokeShape="RoundRectangle 20"
+                                        HeightRequest="40" WidthRequest="40"
+                                        Stroke="#2D4A3E" StrokeThickness="2"
+                                        TranslationX="0"
+                                        VerticalOptions="End">
+                                    <Image Source="ciclista.jpeg" Aspect="AspectFill" />
+                                </Border>
+                                <Border StrokeShape="RoundRectangle 20"
+                                        HeightRequest="40" WidthRequest="40"
+                                        Stroke="#2D4A3E" StrokeThickness="2"
+                                        TranslationX="28"
+                                        VerticalOptions="End">
+                                    <Image Source="natacao.jpg" Aspect="AspectFill" />
+                                </Border>
+                                <Border StrokeShape="RoundRectangle 14"
+                                        HeightRequest="28" WidthRequest="28"
+                                        BackgroundColor="#00C9A7"
+                                        StrokeThickness="0"
+                                        TranslationX="62"
+                                        HorizontalOptions="Start"
+                                        VerticalOptions="Start">
+                                    <Label Text="🔍" FontSize="12"
+                                           HorizontalOptions="Center" VerticalOptions="Center" />
+                                </Border>
+                            </Grid>
+
+                            <Label Text="Find Route"
+                                   FontSize="14" FontAttributes="Bold" TextColor="White" />
+                            <Label Text="Find nearby Route"
+                                   FontSize="10" TextColor="#88AA99" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                </HorizontalStackLayout>
+            </ScrollView>
+            
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

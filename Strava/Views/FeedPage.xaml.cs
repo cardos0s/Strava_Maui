@@ -1,27 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Strava.Models;
-using Strava.ViewModels; 
-using System.Diagnostics;
+﻿using Strava.Views.Components;
 
 namespace Strava.Views;
 
 public partial class FeedPage : ContentPage
 {
-    
-    public FeedPage()
+    public FeedPage(ViewModels.FeedViewModel vm)
     {
         InitializeComponent();
+        BindingContext = vm;
+    }
 
-        // 1. Instancia a ViewModel
-        var viewModel = new FeedViewModel();
-
-        // 2. Define o Contexto da Página (para Comandos, etc)
-        BindingContext = viewModel;
-        
+    private async void OnMenuTapped(object? sender, EventArgs e)
+    {
+        if (Sidemenu.IsOpen)
+            await Sidemenu.Close();
+        else
+            await Sidemenu.Open();
     }
 }

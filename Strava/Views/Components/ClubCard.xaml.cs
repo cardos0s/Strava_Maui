@@ -1,45 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Kotlin.Reflect;
+﻿using System.Windows.Input;
 
 namespace Strava.Views.Components;
 
 public partial class ClubCard : ContentView
 {
-    // ============================================================================
-    // PROPRIEDADES VISUAIS (Dados)
-    // ============================================================================
-
     public static readonly BindableProperty ClubNameProperty =
         BindableProperty.Create(nameof(ClubName), typeof(string), typeof(ClubCard), string.Empty);
 
-    // Subtítulo (ex: "With Sarah + friends") - Opcional, pode deixar fixo se preferir
     public static readonly BindableProperty SubtitleProperty =
-        BindableProperty.Create(nameof(Subtitle), typeof(string), typeof(ClubCard), "With friends");
+        BindableProperty.Create(nameof(Subtitle), typeof(string), typeof(ClubCard), string.Empty);
 
-    // Imagem do logo do clube
     public static readonly BindableProperty ClubLogoSourceProperty =
-        BindableProperty.Create(nameof(ClubLogoSource), typeof(ImageSource), typeof(ClubCard), null);
+        BindableProperty.Create(nameof(ClubLogoSource), typeof(string), typeof(ClubCard), string.Empty);
 
-    // ============================================================================
-    // PROPRIEDADES DE COMANDO (Ações)
-    // ============================================================================
-    public static readonly BindableProperty CloseCommandProperty =
-        BindableProperty.Create(nameof(CloseCommand), typeof(ICommand), typeof(ClubCard));
-    
-    public static readonly BindableProperty CommandParameterProperty = 
-        BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(ClubCard));
-    
+    public static readonly BindableProperty DismissCommandProperty =
+        BindableProperty.Create(nameof(DismissCommand), typeof(ICommand), typeof(ClubCard));
+
     public static readonly BindableProperty JoinCommandProperty =
         BindableProperty.Create(nameof(JoinCommand), typeof(ICommand), typeof(ClubCard));
 
-    // ============================================================================
-    // ACESSORES PÚBLICOS
-    // ============================================================================
     public string ClubName
     {
         get => (string)GetValue(ClubNameProperty);
@@ -52,23 +31,16 @@ public partial class ClubCard : ContentView
         set => SetValue(SubtitleProperty, value);
     }
 
-    public ImageSource ClubLogoSource
+    public string ClubLogoSource
     {
-        get => (ImageSource)GetValue(ClubLogoSourceProperty);
+        get => (string)GetValue(ClubLogoSourceProperty);
         set => SetValue(ClubLogoSourceProperty, value);
     }
-    
-    
-    public ICommand CloseCommand
-    {
-        get => (ICommand)GetValue(CloseCommandProperty);
-        set => SetValue(CloseCommandProperty, value);
-    }
 
-    public object CommandParameter
+    public ICommand DismissCommand
     {
-        get => GetValue(CommandParameterProperty);
-        set => SetValue(CommandParameterProperty, value);
+        get => (ICommand)GetValue(DismissCommandProperty);
+        set => SetValue(DismissCommandProperty, value);
     }
 
     public ICommand JoinCommand
@@ -80,6 +52,5 @@ public partial class ClubCard : ContentView
     public ClubCard()
     {
         InitializeComponent();
-    } 
-    
+    }
 }

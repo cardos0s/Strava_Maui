@@ -4,80 +4,114 @@ using System.Collections.ObjectModel;
 using Strava.Models;
 using Strava.Views;
 
-
 namespace Strava.ViewModels;
 
 public partial class FeedViewModel : BaseViewModel
 {
     [ObservableProperty]
-    private string _userName;
+    private string _userName = string.Empty;
 
     public ObservableCollection<ClubSuggestionModel> ClubSuggestions { get; } = new();
-    public ObservableCollection<ActivityCard> Activities { get; } = new();
+    public ObservableCollection<ActivityCardModel> Activities { get; } = new();
 
     public FeedViewModel()
     {
-        UserName = Preferences.Default.Get("user_name", "Atleta");
+        UserName = Preferences.Default.Get("user_name", "John");
 
+        LoadClubs();
+        LoadActivities();
+    }
+
+    private void LoadClubs()
+    {
         ClubSuggestions.Add(new ClubSuggestionModel
         {
             ClubName = "Run Nation",
             Subtitle = "With Sarah + friends",
-            ClubLogoSource = "dotnet_bot.png"
+            ClubLogoSource = "run_nation.png"
         });
         ClubSuggestions.Add(new ClubSuggestionModel
         {
             ClubName = "Pedal Leve",
             Subtitle = "Grupo de ciclismo iniciante",
-            ClubLogoSource = "dotnet_bot.png" 
+            ClubLogoSource = "pedal.png"
         });
         ClubSuggestions.Add(new ClubSuggestionModel
         {
             ClubName = "Trilheiros da Serra",
             Subtitle = "Aventuras de fim de semana",
-            ClubLogoSource = "dotnet_bot.png"
+            ClubLogoSource = "trilheiros_serra.jpg"
         });
-        Activities.Add(new ActivityCard
+        ClubSuggestions.Add(new ClubSuggestionModel
+        {
+            ClubName = "Coastal Cyclists",
+            Subtitle = "Will James + 9 friends",
+            ClubLogoSource = "coastal.jpg"
+        });
+    }
+
+    private void LoadActivities()
+    {
+        Activities.Add(new ActivityCardModel
         {
             UserName = "Sarah James",
-            UserImage = "dotnet_bot.png", // Provisório
-            LocationDate = "Yesterday, LA",
+            UserImage = "sarah.jpg",
+            LocationDate = "Yesterday, Conquista",
             Title = "Afternoon Ride",
-            Stat1Label = "Distance", Stat1Value = "2.28km",
-            Stat2Label = "Time", Stat2Value = "22m",
-            MapImage = "dotnet_bot.png" // Provisório
+            Stat1Label = "Distance",
+            Stat1Value = "2.28km",
+            Stat2Label = "Time",
+            Stat2Value = "22m 9s",
+            MapImage = "https://maps.geoapify.com/v1/staticmap?style=osm-bright-smooth&width=600&height=300&center=lonlat:-40.837,-14.862&zoom=15&apiKey=ac7d466254be49a0bdd1b32b620fd7dd",
         });
 
-        Activities.Add(new ActivityCard
+        Activities.Add(new ActivityCardModel
         {
-            UserName = "John Sanaarh",
-            UserImage = "dotnet_bot.png",
+            UserName = "JPedro",
+            UserImage = "jonh.jpg",
             LocationDate = "Today, Brazil",
             Title = "Night Run",
-            Stat1Label = "Distance", Stat1Value = "5.00km",
-            Stat2Label = "Time", Stat2Value = "30m",
-            MapImage = "dotnet_bot.png"
+            Stat1Label = "Distance",
+            Stat1Value = "5.00km",
+            Stat2Label = "Time",
+            Stat2Value = "30m",
+            MapImage = "https://maps.geoapify.com/v1/staticmap?style=osm-bright-smooth&width=600&height=300&center=lonlat:-40.844,-14.858&zoom=15&apiKey=ac7d466254be49a0bdd1b32b620fd7dd",
         });
-        
-    }
-    
 
-    
+        Activities.Add(new ActivityCardModel
+        {
+            UserName = "Maria Silva",
+            UserImage = "maria.jpg",
+            LocationDate = "2 days ago, Conquista",
+            Title = "Morning Hike",
+            Stat1Label = "Distance",
+            Stat1Value = "8.5km",
+            Stat2Label = "Time",
+            Stat2Value = "1h 15m",
+            MapImage = "https://maps.geoapify.com/v1/staticmap?style=osm-bright-smooth&width=600&height=300&center=lonlat:-40.830,-14.870&zoom=15&apiKey=ac7d466254be49a0bdd1b32b620fd7dd",
+        });
+    }
+
+    [RelayCommand]
+    private async Task NavigateToActivity(string activityType)
+    {
+        if (string.IsNullOrWhiteSpace(activityType)) return;
+        await Shell.Current.GoToAsync($"{nameof(ActivityDetailPage)}?type={activityType}");
+    }
+
     [RelayCommand]
     private void RemoveClub(ClubSuggestionModel club)
     {
-        if (ClubSuggestions.Contains(club))
+        if (club != null && ClubSuggestions.Contains(club))
             ClubSuggestions.Remove(club);
     }
 
     [RelayCommand]
     private async Task JoinClub(ClubSuggestionModel club)
     {
-        await Shell.Current.DisplayAlert(
-            "Sucesso",
-            $"Solicitação enviada para {club.ClubName}",
-            "OK"
-        );
+        if (club == null) return;
+        await Shell.Current.DisplayAlert("Joined! 🎉", $"You joined {club.ClubName}!", "OK");
+        ClubSuggestions.Remove(club);
     }
 
     [RelayCommand]
@@ -89,14 +123,11 @@ public partial class FeedViewModel : BaseViewModel
             Preferences.Default.Set("user_name", newName);
         }
     }
+
     [RelayCommand]
-    private async Task OpenActivity(ActivityCard activity)
+    private async Task OpenActivity(ActivityCardModel activity)
     {
         if (activity == null) return;
-
-
         await Shell.Current.GoToAsync(nameof(GoToUserProfile));
-        await App.Current.MainPage.DisplayAlert("Navegação", $"Abrindo post de {activity.UserName}", "OK");
     }
-    
 }

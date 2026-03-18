@@ -2,7 +2,7 @@
 
 public class ClubSuggestionModel
 {
-    public string ClubName { get; set; }
-    public string Subtitle { get; set; }
-    public string ClubLogoSource { get; set; }
+    public string ClubName { get; set; } = string.Empty;
+    public string Subtitle { get; set; } = string.Empty;
+    public string ClubLogoSource { get; set; } = string.Empty;
 }
