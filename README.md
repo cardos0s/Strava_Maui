@@ -4,6 +4,9 @@ A Strava-inspired mobile application built with .NET MAUI, focused on activity t
 
 This project was created to practice and demonstrate mobile engineering concepts such as component-based UI, navigation structure, platform-specific styling and clean separation of responsibilities in a cross-platform app.
 
+<img width="2530" height="1410" alt="Captura de Tela 2026-05-05 às 20 45 17" src="https://github.com/user-attachments/assets/0a54c595-39da-4f32-a2ca-7a027adc197e" />
+
+
 ## Overview
 
 Strava MAUI is a mobile interface inspired by the Strava experience, built using C# and .NET MAUI.  
